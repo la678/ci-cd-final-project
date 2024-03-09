@@ -55,6 +55,21 @@ spec:
         nosetests $(params.args)
 
 ---
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: build
+spec:
+    workspaces:
+      - name: source
+        workspace: output
+    taskRef:
+      name: buildah
+      kind: ClusterTask
+    params:
+    - name: IMAGE
+      value: "$(params.build-image)"
+
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
@@ -68,6 +83,6 @@ spec:
       type: string
   steps:
     - name: deploy-to-cluster
-      image: quay.io/openshift/origin-cli:latest
+      image: image-registry.openshift-image-registry.svc:5000/$SN_ICR_NAMESPACE/tekton-lab:latest 
       script: |
         oc create deployment $(params.app-name) --image=$(params.build-image) --dry-run=client -o yaml | oc apply -f -
