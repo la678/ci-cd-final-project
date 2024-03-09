@@ -76,13 +76,21 @@ kind: Task
 metadata:
   name: deploy
 spec:
+  taskRef:
+    name: openshift-client
+    kind: ClusterTask
   params:
     - name: app-name
       type: string
     - name: build-image
       type: string
+    - name: repo-url
+      type: string  
+    - name: branch
+      type: string  
+      default: master
   steps:
     - name: deploy-to-cluster
-      image: image-registry.openshift-image-registry.svc:5000/$SN_ICR_NAMESPACE/tekton-lab:latest 
+      image: image-registry.openshift-image-registry.svc:5000/$SN_ICR_NAMESPACE/tekton-lab:latest
       script: |
         oc create deployment $(params.app-name) --image=$(params.build-image) --dry-run=client -o yaml | oc apply -f -
