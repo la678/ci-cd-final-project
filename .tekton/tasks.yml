@@ -67,8 +67,10 @@ spec:
       name: buildah
       kind: ClusterTask
     params:
-    - name: IMAGE
-      value: "$(params.build-image)"
+      - name: build-image
+        type: string
+      - name: IMAGE
+        default: "$(params.build-image)"
 
 ---
 apiVersion: tekton.dev/v1beta1
