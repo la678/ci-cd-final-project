@@ -72,7 +72,7 @@ spec:
     steps:
       - name: IMAGE
         image: image-registry.openshift-image-registry.svc:5000/$SN_ICR_NAMESPACE/tekton-lab:latest
-        script: buildah bud -t $IMAGE
+        script: buildah bud -t $(params.build-image)
 ---
 apiVersion: tekton.dev/v1beta1
 kind: Task
